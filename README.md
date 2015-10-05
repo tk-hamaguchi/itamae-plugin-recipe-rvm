@@ -9,22 +9,35 @@ Installation
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'itamae-plugin-recipe-rvm', github: 'tk-hamaguchi/itamae-plugin-recipe-rvm'
+gem 'itamae-plugin-recipe-rvm'
 ```
 
 And then execute:
 
-    $ bundle
-
+```sh
+$ bundle
+```
 
 Usage
 --------
 
 Include your recipe.
 
-```ruby
-include_recipe 'rvm'
+```ruby cookbooks/rvm/default.rb
+package 'sudo'
+include_recipe 'rvm::system'
 ```
 
+Then execute itamae.
 
+For example.
 
+Docker:
+```sh
+$ itamae docker cookbooks/rvm/default.rb --image={YOUR_IMAGE_NAME} --no-tls-verify-peer
+```
+
+Vagrant:
+```sh
+$ itamae ssh --vagrant --host {YOUR_HOST_NAME} cookbooks/rvm/default.rb
+```
