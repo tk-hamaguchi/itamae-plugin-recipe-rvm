@@ -1,3 +1,7 @@
+Given(/^Pending: .+$/) do
+  pending
+end
+
 Given(/^dockerが稼働している$/) do
   Excon.defaults[:ssl_verify_peer] = false
   Excon.defaults[:write_timeout] = 1000

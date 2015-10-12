@@ -1,13 +1,12 @@
-execute 'install GPG-Key' do
-  user 'root'
-  command 'gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3'
-  not_if 'gpg --list-key | grep D39DC0E3'
-end
+require 'itamae/plugin/resource/rvm_get'
+require 'itamae/plugin/resource/rvm_install'
+require 'itamae/plugin/resource/rvm_gemset_create'
+require 'itamae/plugin/resource/rvm_execute'
+require 'itamae/plugin/resource/rvm_gem_package'
+require 'itamae/plugin/resource/rvm_config'
 
-package 'curl' do
-  action :install
-end
+package 'curl'
+package 'git'
+package 'which'
 
-package 'git' do
-  action :install
-end
+node['rvm'] ||= {}

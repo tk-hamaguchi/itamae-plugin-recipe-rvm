@@ -1,25 +1,17 @@
-include_recipe 'common.rb'
+include_recipe 'rvm::common'
 
-execute 'install rvm' do
+package 'sudo'
+
+rvm_get node['rvm']['version'] do
   user 'root'
-  command '\curl -sSL https://get.rvm.io | bash -s stable --ruby --gems=bundle'
-  not_if 'ls /usr/local/rvm'
 end
 
-file '/etc/rvmrc' do
+rvm_config '/etc/rvmrc' do
   user 'root'
-  action :edit
-  block do |content|
-    content.concat(<<-"EOS".gsub(/^\s+\|/, ''))
-      |
-      |### Itamae cooked
-      |rvm_install_on_use_flag=1
-      |rvm_project_rvmrc=1
-      |rvm_gemset_create_on_use_flag=1
-      |### Itamae cooked
-    EOS
-  end
-  not_if "grep '^### Itamae cooked$' /etc/rvmrc"
+  gemset_create_on_use_flag node['rvm']['gemset_create_on_use_flag']
+  install_on_use_flag       node['rvm']['install_on_use_flag']
+  project_rvmrc             node['rvm']['project_rvmrc']
+  auto_reload_flag          node['rvm']['auto_reload_flag']
+  autoinstall_bundler_flag  node['rvm']['autoinstall_bundler_flag']
 end
-
 

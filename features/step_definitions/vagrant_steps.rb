@@ -16,12 +16,14 @@ Given(/^下記のVagrantfileからvagrant upする:$/) do |config|
   @vmname = created[1]
 end
 
-
 When(/^作成した仮想マシンに"([^"]*)"をセットアップする$/) do |cookbook|
   cmd = "itamae ssh --vagrant --host #{@vmname} #{cookbook}"
   run_simple(cmd, false, 300_000)
+
   err = stderr_from(cmd)
   fail err if err.length > 0
+
+#  print stdout_from(cmd).scan(/^ *ERROR *: *(.+)$/)
 end
 
 When(/^セットアップした仮想マシンに対してserverspecでテストを行う$/) do
@@ -30,6 +32,10 @@ When(/^セットアップした仮想マシンに対してserverspecでテスト
       cmd = 'rspec spec'
       run_simple(cmd, false, 300_000)
       @err = stderr_from(cmd)
+      out = stdout_from(cmd)
+      if out =~ /Failed examples:/
+        @err = stdout_from(cmd)
+      end
     end
   end
 end
